@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace WindowsFormsApp1
 {
-    internal class Prestazione 
+    public class Prestazione 
     {
         private string id;
         private Socio erogatore;
@@ -28,7 +28,7 @@ namespace WindowsFormsApp1
             this.data = data;
             this.tipo = tipo;
         }
-        [JsonProperty]
+        
 
         public string GetId()
         {
@@ -43,7 +43,7 @@ namespace WindowsFormsApp1
                 throw new Exception("Id non valido");
         }
 
-        [JsonProperty]
+       
         public Socio GetEroga()
         {
             return erogatore;
@@ -58,7 +58,7 @@ namespace WindowsFormsApp1
                 throw new Exception("Erogatore non valido");
         }
 
-        [JsonProperty]
+        
         public Socio GetRice()
         {
             return ricevente;
@@ -73,7 +73,7 @@ namespace WindowsFormsApp1
                 throw new Exception("Erogatore non valido");
         }
 
-        [JsonProperty]
+        
 
         public int GetOre()
         {
@@ -88,7 +88,7 @@ namespace WindowsFormsApp1
                 throw new Exception("Ore non valide");
         }
 
-        [JsonProperty]
+       
         public DateTime GetData()
         {
             return data;
@@ -102,7 +102,6 @@ namespace WindowsFormsApp1
                 throw new Exception("Data non valida");
         }
 
-        [JsonProperty]
 
         public string GetTipo()
         {

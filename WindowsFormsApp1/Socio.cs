@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WindowsFormsApp1
 {
-     class Socio : IEquatable<Socio>
+     public class Socio : IEquatable<Socio>
     {
         private string nome;
         private string cognome;
@@ -25,67 +25,81 @@ namespace WindowsFormsApp1
             this.segreteria = segreteria;
             Prestazioni = new List<Prestazione>();
         }
-        [JsonProperty]
-        public string GetNome()
-        {
-            return nome;
-        }
 
-        public void SetNome(string nuovonome)
-        {
-            if (!String.IsNullOrWhiteSpace(nuovonome))
-                cognome = nuovonome;
-            else
-                throw new Exception("Cognome non valido");
-        }
-        [JsonProperty]
-        public string GetCognome()
-        {
-            return nome;
-        }
 
-        public void SetCognome(string nuovocognome)
+        [JsonProperty]
+        public string Nome
         {
-            if (!String.IsNullOrWhiteSpace(nuovocognome))
-                cognome = nuovocognome;
-            else
-                throw new Exception("Cognome non valido");
+            get
+            {
+                return nome;
+            }
+            private set
+            {
+                if (!String.IsNullOrWhiteSpace(value))
+                    nome = value;
+                else
+                    throw new Exception("Nome non valido");
+            }
         }
         [JsonProperty]
-        public double GetNumero()
+        public string Cognome
         {
-            return GetNumero();
+            get
+            {
+                return cognome;
+            }
+            private set
+            {
+                if (!String.IsNullOrWhiteSpace(value))
+                    cognome = value;
+                else
+                    throw new Exception("Cognome non valido");
+            }
         }
 
-        public void SetNumero(string nuovonumero)
+        [JsonProperty]
+        public double Telefono
         {
-            if (!String.IsNullOrWhiteSpace(nuovonumero) && nuovonumero.Length == 10)
-                telefono = nuovonumero;
-            else
-                throw new Exception("Numero di Telefono non valido");
+            get
+            {
+                return telefono;
+            }
+            private set
+            {
+                if (!String.IsNullOrWhiteSpace(value.ToString()) && value.ToString().Length == 10)
+                    telefono = value;
+                else
+                    throw new Exception("Numero di Telefono non valido");
+            }
+        }
+
+        [JsonProperty]
+        public int Debito
+        {
+            get
+            {
+                return debito;
+            }
+            set
+            {
+                debito = value;
+            }
         }
         [JsonProperty]
-        public int GetDebito()
+        public bool Segreteria
         {
-            return debito;
-        }
-
-        public void SetDebito(int nuovodebito)
-        {
-            debito=nuovodebito;
-        }
-        [JsonProperty]
-        public bool GetSegreteria()
-        {
-            return segreteria;
-        }
-
-        public void SetSegreteria(bool nuovasegreteria)
-        {
-            if (!String.IsNullOrWhiteSpace(nuovasegreteria.ToString()))
-                segreteria = nuovasegreteria;
-            else
-                throw new Exception("Partecipazione alla segreteria non valida");
+            get
+            {
+                return segreteria;
+            }
+            private set
+            {
+                if (!String.IsNullOrWhiteSpace(value.ToString()))
+                    segreteria = value;
+                else
+                    throw new Exception("Partecipazione alla segreteria non valida");
+            }
         }
         [JsonProperty]
         public List<Prestazione> Prestazioni { get; set; }
@@ -110,11 +124,11 @@ namespace WindowsFormsApp1
 
             foreach (Prestazione prestazione in Prestazioni)
             {
-                if (prestazione.erogatore.Equals(this))
+                if (prestazione.GetEroga().Equals(this))
                 {
-                    oreErogate += prestazione.Ore;
+                    oreErogate += prestazione.ore;
                 }
-                else if (prestazione.ricevente.Equals(this))
+                else if (prestazione.GetRice().Equals(this))
                 {
                     oreRicevute += prestazione.ore;
                 }
@@ -123,7 +137,7 @@ namespace WindowsFormsApp1
             this.debito = oreRicevute - oreErogate;
             return this.debito;
         }
-        protected Socio(Socio other) : this(other.cognome, other.nome, other.telefono, other.debito, other.segreteria)
+        protected Socio(Socio other) : this(other.cognome, other.nome, other.debito, other.telefono, other.segreteria)
         {
 
         }
