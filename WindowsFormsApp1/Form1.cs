@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WindowsFormsApp1
 {
@@ -43,15 +44,12 @@ namespace WindowsFormsApp1
             }
         }
 
-        private void SaveData()
+        private void Aggiungi()
         {
-            // Salvare dati su file JSON
-            string sociJson = JsonConvert.SerializeObject(soci);
-            File.WriteAllText("soci.json", sociJson);
 
-            string prestazioniJson = JsonConvert.SerializeObject(prestazioni);
-            File.WriteAllText("prestazioni.json", prestazioniJson);
         }
+
+        
 
         private void UpdateUI()
         {
@@ -103,6 +101,75 @@ namespace WindowsFormsApp1
         {
             LoadData();
             UpdateUI();
+        }
+
+        private void add_Click(object sender, EventArgs e)
+        {
+            bool done = true;
+            double newphone;
+            if (String.IsNullOrWhiteSpace(textBox1.Text))
+            {
+                done = false;
+                MessageBox.Show("Cognome non valido");
+            }
+            if (String.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                done = false;
+                MessageBox.Show("Nome non valido");
+            }
+            if (String.IsNullOrWhiteSpace(textBox3.Text) || textBox3.Text.Length != 10)
+            {
+                try
+                {
+                    newphone = double.Parse(textBox3.Text);
+                }
+                catch
+                {
+                    done = false;
+                    MessageBox.Show("Telefono non valido");
+                }
+            }
+            
+            if (done)
+            {
+                Socio nuovo = new Socio(textBox2.Text, textBox1.Text,0, double.Parse(textBox3.Text), false);
+                Aggiungi(nuovo);
+                MessageBox.Show("Aggiunta eseguita con SUCCESSO");
+            }
+        }
+        public static void Aggiungi(Socio nuovo)
+        {
+            var N = new FileStream(@"soci.json", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            N.Close();
+            StreamReader sr = new StreamReader(@"soci.json");
+            StreamWriter sw = new StreamWriter(@"./soci2.json");
+
+            string line = "";
+            int i = 0;
+
+            while (!sr.EndOfStream || i != 1)
+            {
+                line = sr.ReadLine();
+
+                if (line != null && i == 0 && line != "]") //controlla se è 0 in quanto se è 1 vuol dire che è già scritto
+                {
+                    sw.WriteLine(line);
+                }
+                else if (line == "]")
+                {
+                    sw.WriteLine(",");
+                    //aggiunta classe jsonata
+                    string jsonString = JsonConvert.SerializeObject(nuovo, Formatting.None);
+                    sw.WriteLine(jsonString);
+                    sw.WriteLine("]");
+                    i = 1;
+                }
+            }
+            sr.Close();
+            sw.Close();
+
+            System.IO.File.Delete(@"soci.json");
+            System.IO.File.Move(@"./soci2.json", @"soci.json");
         }
     }
 }
