@@ -122,13 +122,13 @@ namespace WindowsFormsApp1
             int oreErogate = 0;
             int oreRicevute = 0;
 
-            foreach (Prestazione prestazione in Prestazioni)
+            foreach (Prestazione prestazione in Prestazioni)  
             {
-                if (prestazione.GetEroga().Equals(this))
+                if (prestazione.GetEroga().Equals(this)) //se erogatore di quella prestazione è uguale ad oggetto corrente (quello che sta leggendo) il numero di ore erogate viene incrementato
                 {
                     oreErogate += prestazione.ore;
                 }
-                else if (prestazione.GetRice().Equals(this))
+                else if (prestazione.GetRice().Equals(this)) // se il ricevente 
                 {
                     oreRicevute += prestazione.ore;
                 }
